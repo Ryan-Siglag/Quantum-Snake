@@ -69,6 +69,15 @@ def splash_screen():
         message("(Arrow keys to move)", green, 200)
         pygame.display.update()
 
+def is_collision(position, barriers):
+    return position in barriers
+
+def place_food(barriers, width, height, snake_block):
+    while True:
+        foodx = round(random.randrange(0, width - snake_block) / snake_block) * snake_block
+        foody = round(random.randrange(0, height - snake_block) / snake_block) * snake_block
+        if not is_collision([foodx, foody], barriers):
+            return foodx, foody
 
 def game_loop():
     game_over = False
@@ -83,10 +92,8 @@ def game_loop():
     snake_List = []
     length_of_snake = 1
 
-    foodx = round(random.randrange(0, width - snake_block) / snake_block) * snake_block
-    foody = round(random.randrange(0, height - snake_block) / snake_block) * snake_block
-
     barriers = []
+    foodx, foody = place_food(barriers, width, height, snake_block)
 
     score = 0
     direction = 'RIGHT'
@@ -214,11 +221,9 @@ def game_loop():
             else:
                 barriers.append([foodx, foody])
 
-            foodx = round(random.randrange(0, width - snake_block) / snake_block) * snake_block
-            foody = round(random.randrange(0, height - snake_block) / snake_block) * snake_block
+            foodx, foody = place_food(barriers, width, height, snake_block)
 
         clock.tick(snake_speed)
-
     pygame.quit()
     quit()
 
